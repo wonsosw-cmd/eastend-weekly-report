@@ -740,14 +740,14 @@ function renderSection1(s1) {
       <table class="summary" style="margin-top:-1px;">
         <tr>
           <td class="sub-cell" style="width:25%;border-right:2px solid #D8DCE3;">
-            <div class="row-item"><span class="label">${M-1}월 누계</span><span class="value">${fmt(d.m1cum)}</span></div>
-            <div class="row-item pct"><span class="label">${M-1}월 동기비</span><span class="value ${pctClass(d.m1pct)}">${d.m1pct}%</span></div>
-            <div class="row-item"><span class="label">${M-1}월 총계</span><span class="value">${fmt(d.m1total)}</span></div>
+            <div class="row-item"><span class="label">${((M-1+11)%12)+1}월 누계</span><span class="value">${fmt(d.m1cum)}</span></div>
+            <div class="row-item pct"><span class="label">${((M-1+11)%12)+1}월 동기비</span><span class="value ${pctClass(d.m1pct)}">${d.m1pct}%</span></div>
+            <div class="row-item"><span class="label">${((M-1+11)%12)+1}월 총계</span><span class="value">${fmt(d.m1total)}</span></div>
           </td>
           <td class="sub-cell" style="width:25%;border-right:2px solid #D8DCE3;">
-            <div class="row-item"><span class="label">${M-2}월 누계</span><span class="value">${fmt(d.m2cum)}</span></div>
-            <div class="row-item pct"><span class="label">${M-2}월 동기비</span><span class="value ${pctClass(d.m2pct)}">${d.m2pct}%</span></div>
-            <div class="row-item"><span class="label">${M-2}월 총계</span><span class="value">${fmt(d.m2total)}</span></div>
+            <div class="row-item"><span class="label">${((M-2+11)%12)+1}월 누계</span><span class="value">${fmt(d.m2cum)}</span></div>
+            <div class="row-item pct"><span class="label">${((M-2+11)%12)+1}월 동기비</span><span class="value ${pctClass(d.m2pct)}">${d.m2pct}%</span></div>
+            <div class="row-item"><span class="label">${((M-2+11)%12)+1}월 총계</span><span class="value">${fmt(d.m2total)}</span></div>
           </td>
           <td class="sub-cell" style="width:25%;border-right:2px solid #D8DCE3;">
             <div class="row-item"><span class="label">12월 누계</span><span class="value">${fmt(d.m12cum)}</span></div>
@@ -781,9 +781,9 @@ function renderSection1(s1) {
         </div>
       </div>
       <div class="mc-grid">
-        ${makeCompareCard(`${M-1}월`, d.m1cum, d.m1pct, d.m1total)}
-        ${makeCompareCard(`${M-2}월`, d.m2cum, d.m2pct, d.m2total)}
-        ${makeCompareCard('12월', d.m12cum, d.m12pct, d.m12total)}
+        ${makeCompareCard(`${((M-1+11)%12)+1}월`, d.m1cum, d.m1pct, d.m1total)}
+        ${makeCompareCard(`${((M-2+11)%12)+1}월`, d.m2cum, d.m2pct, d.m2total)}
+        ${makeCompareCard(((M-3+11)%12)+1+'월', d.m12cum, d.m12pct, d.m12total)}
         ${makeCompareCard(`25' ${M}월`, d.ly3cum, d.ly3pct, d.ly3total)}
       </div>
     </div>`;
