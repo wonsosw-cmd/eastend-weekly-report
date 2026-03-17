@@ -1139,7 +1139,7 @@ function getFilteredChannels() {
     }
 
     const tree = buildTree(tagged);
-    tree.forEach(n => sortTree(n.children));
+    tree.forEach(n => n.children.forEach(c => { c.children.sort((a,b) => (sortVal(a) - sortVal(b)) * dir); }));
     filtered = flatten(tree);
   }
   return filtered;
