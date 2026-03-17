@@ -494,19 +494,20 @@ const TARGET_MONTH = 3; // %%INJECT_MONTH%%
     // --- S1 Adapter ---
     if (view.s1 && !view.s1.revenue) {
       var s1 = view.s1;
-      var mkMetric = function(cum) {
+      var mkMetric = function(cum, tgt, prog, comp) {
+        comp = comp || {};
         return {
           cumulative: cum || 0,
-          target: 0, progress: 0,
-          m1cum: 0, m1pct: 0, m1total: 0,
-          m2cum: 0, m2pct: 0, m2total: 0,
-          m12cum: 0, m12pct: 0, m12total: 0,
-          ly3cum: 0, ly3pct: 0, ly3total: 0
+          target: tgt || 0, progress: prog || 0,
+          m1cum: comp.m1cum || 0, m1pct: comp.m1pct || 0, m1total: comp.m1total || 0,
+          m2cum: comp.m2cum || 0, m2pct: comp.m2pct || 0, m2total: comp.m2total || 0,
+          m12cum: comp.m12cum || 0, m12pct: comp.m12pct || 0, m12total: comp.m12total || 0,
+          ly3cum: comp.ly3cum || 0, ly3pct: comp.ly3pct || 0, ly3total: comp.ly3total || 0
         };
       };
       view.s1 = {
-        revenue: mkMetric(s1.curRev || s1.curCum),
-        transaction: mkMetric(s1.curCum)
+        revenue: mkMetric(s1.curRev || s1.curCum, s1.target, s1.rate, s1.revComparison || s1.comparison),
+        transaction: mkMetric(s1.curCum, s1.txTarget || 0, s1.txRate || 0, s1.txComparison)
       };
     }
 
