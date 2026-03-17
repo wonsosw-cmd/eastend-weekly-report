@@ -924,7 +924,7 @@ function initChart() {
   const src = chartDay === 'fri' ? w.fri : w.tue;
 
   // 기준일 주차 인덱스 (시트 E/F열 기준: 화요주차, 금요주차)
-  const curWeekIdx = chartDay === 'fri' ? CUR_WEEK_FRI : CUR_WEEK_TUE;
+  const curWeekIdx = src.d2026.reduce(function(last,v,i){return (v!=null&&v>0)?i:last},0);
   const colors2026 = src.d2026.map((v, i) => {
     if (v === null || v === 0) return 'rgba(26,75,150,0.85)';
     return i === curWeekIdx ? '#E53935' : 'rgba(26,75,150,0.85)';
