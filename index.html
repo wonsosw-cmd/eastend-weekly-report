@@ -924,7 +924,7 @@ function initChart() {
   const src = chartDay === 'fri' ? w.fri : w.tue;
 
   // 기준일 주차 인덱스 (시트 E/F열 기준: 화요주차, 금요주차)
-  const curWeekIdx = src.d2026.reduce(function(last,v,i){return (v!=null&&v>0)?i:last},0);
+  const curWeekIdx=(function(){var d=src.d2026,last=-1,prev=-1;for(var i=0;i<d.length;i++){if(d[i]!=null&&d[i]>0){prev=last;last=i}}if(prev>=0&&d[last]<d[prev]*0.5)return prev;return last>=0?last:0})();
   const colors2026 = src.d2026.map((v, i) => {
     if (v === null || v === 0) return 'rgba(26,75,150,0.85)';
     return i === curWeekIdx ? '#E53935' : 'rgba(26,75,150,0.85)';
