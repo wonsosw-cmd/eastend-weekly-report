@@ -455,7 +455,7 @@ tr.subtotal-depth2 td { color:#1B2E5C !important; font-weight:600; }
   .s3-scroll .chart-container { min-width:1400px; height:380px; }
 }
 </style>
-</head>
+<style>body{font-size:16px !important}.section{margin-bottom:28px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}.section-header{font-size:18px !important;padding:14px 20px !important}.mk-hero-value{font-size:28px !important;letter-spacing:-0.5px}.mk-sub-value{font-size:16px !important}.mc-card{padding:14px !important;font-size:15px !important}.mc-card .value{font-size:16px !important;font-weight:700 !important}.pct-up{color:#d32f2f !important;font-size:15px !important;font-weight:700 !important}.pct-down{color:#1565c0 !important;font-size:15px !important;font-weight:700 !important}.summary td{padding:10px 16px !important}.summary-label{font-size:14px !important;font-weight:600 !important}table.daily td,table.daily th{padding:10px 12px !important;font-size:14px !important}.row-total td{font-weight:800 !important}.header{padding:16px 24px !important}.header h1{font-size:20px !important}.header-date{font-size:16px !important;font-weight:600 !important}</style></head>
 <body>
 
 <!-- ===== HEADER ===== -->
@@ -1009,7 +1009,7 @@ function initChart() {
           }
         },
         y: {
-          beginAtZero: true,
+          beginAtZero: false,
           display: !isMobile, /* hide Y-axis on mobile (rendered externally) */
           ticks: {
             font: { family: 'Noto Sans KR', size: 11 },
@@ -1428,5 +1428,5 @@ window.addEventListener('DOMContentLoaded', () => {
   renderDashboard();
 });
 </script>
-</body>
+<script>window.addEventListener("load",function(){var pw="EEIHK!3";var ok=false;for(var i=0;i<3;i++){var input=prompt("비밀번호를 입력하세요");if(input===pw){ok=true;break;}if(input===null)break;alert("비밀번호가 틀렸습니다. ("+(2-i)+"회 남음)");}if(!ok){document.body.innerHTML="<div style='text-align:center;margin-top:100px;font-size:20px;color:#999'>접근이 제한되었습니다.</div>";}});</script></body>
 </html>
