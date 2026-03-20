@@ -1123,7 +1123,7 @@ function getFilteredChannels() {
           currentD2.children.push({item, children: []});
         } else if (d === 1) {
           currentD1 = {item, children: []};
-          roots.push(currentD1);
+          if(currentD0){currentD0.children.push(currentD1);}else{roots.push(currentD1);}
           currentD2 = null;
         }
       });
@@ -1146,7 +1146,7 @@ function getFilteredChannels() {
     }
 
     const tree = buildTree(tagged);
-    tree.forEach(n => n.children.forEach(c => { c.children.sort((a,b) => (sortVal(a) - sortVal(b)) * dir); }));
+    tree.forEach(function(d0){ d0.children.forEach(function(d1){ d1.children.forEach(function(d2){ d2.children.sort(function(a,b){ return (sortVal(a)-sortVal(b))*dir; }); }); }); });
     filtered = flatten(tree);
   }
   return filtered;
