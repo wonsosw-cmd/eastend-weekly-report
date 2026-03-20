@@ -1147,10 +1147,9 @@ function getFilteredChannels() {
 
     const tree = buildTree(tagged);
     tree.forEach(function(d0){ d0.children.forEach(function(d1){ d1.children.forEach(function(d2){ d2.children.sort(function(a,b){ return (sortVal(a)-sortVal(b))*dir; }); }); }); });
-    filtered = flatten(tree);
+    filtered = flatten(tree); filtered = filtered.filter(function(r){ return r.depth < 3 || (r.data[7]||0) !== 0 || (r.data[8]||0) !== 0; });
   }
-  filtered = filtered.filter(function(r){ return r.depth < 3 || (r.data[7]||0) !== 0 || (r.data[8]||0) !== 0; });
-return filtered;
+  return filtered;
 }
 
 function renderSection4(s4) {
