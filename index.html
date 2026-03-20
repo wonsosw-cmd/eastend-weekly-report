@@ -566,60 +566,67 @@ const TARGET_MONTH = 3; // %%INJECT_MONTH%%
 
       // Group by brand then distribution
       var brandGroups = {};
-      stores.forEach(function(st) {
-        var b = st.brand || 'unknown';
-        if (!brandGroups[b]) brandGroups[b] = {};
-        var dist = st.distribution || 'etc';
-        if (!brandGroups[b][dist]) brandGroups[b][dist] = [];
-        brandGroups[b][dist].push(st);
+stores.forEach(function(st) {
+  var b = st.brand || "unknown";
+  var ch = st.channel || "기타";
+  var dist = st.distribution || "etc";
+  if (!brandGroups[b]) brandGroups[b] = {};
+  if (!brandGroups[b][ch]) brandGroups[b][ch] = {};
+  if (!brandGroups[b][ch][dist]) brandGroups[b][ch][dist] = [];
+  brandGroups[b][ch][dist].push(st);
+});
+var channels = [];
+var grandCw = new Array(s4dates.length).fill(0);
+var grandPw = 0;
+var chOrder = ["오프라인","온라인","기타","그 외 채널"];
+Object.keys(brandGroups).forEach(function(brandName) {
+  var brandCw = new Array(s4dates.length).fill(0);
+  var brandPwTotal = 0;
+  var brandChildren = [];
+  var allChKeys = Object.keys(brandGroups[brandName]);
+  var orderedCh = chOrder.filter(function(c){return allChKeys.indexOf(c)>=0;});
+  allChKeys.forEach(function(c){if(orderedCh.indexOf(c)<0) orderedCh.push(c);});
+  orderedCh.forEach(function(chName) {
+    var chCw = new Array(s4dates.length).fill(0);
+    var chPwTotal = 0;
+    var chChildren = [];
+    Object.keys(brandGroups[brandName][chName]).forEach(function(distName) {
+      var storeList = brandGroups[brandName][chName][distName];
+      var distCw = new Array(s4dates.length).fill(0);
+      var distPwTotal = 0;
+      var distChildren = [];
+      storeList.forEach(function(st) {
+        var cwDays = st.daily ? st.daily.map(function(d){return d.value||0;}) : new Array(s4dates.length).fill(0);
+        var cwSum = cwDays.reduce(function(a,b){return a+b;},0);
+        var ps = prevMap[st.code];
+        var pwSum = ps && ps.daily ? ps.daily.reduce(function(a,d){return a+(d.value||0);},0) : 0;
+        var pct = pwSum > 0 ? Math.round(cwSum/pwSum*100) : 0;
+        cwDays.forEach(function(v,i){distCw[i]+=v;});
+        distPwTotal += pwSum;
+        distChildren.push({depth:3,label:st.store||st.channel||st.code,data:cwDays.concat([cwSum,pwSum,pct])});
       });
-
-      var channels = [];
-      var grandCw = new Array(s4dates.length).fill(0);
-      var grandPw = 0;
-
-      // Build hierarchy: brand(depth0) > distribution(depth1) > store(depth2)
-      Object.keys(brandGroups).forEach(function(brandName) {
-        var brandCw = new Array(s4dates.length).fill(0);
-        var brandPwTotal = 0;
-        var brandChildren = [];
-
-        Object.keys(brandGroups[brandName]).forEach(function(distName) {
-          var storeList = brandGroups[brandName][distName];
-          var distCw = new Array(s4dates.length).fill(0);
-          var distPwTotal = 0;
-          var distChildren = [];
-
-          storeList.forEach(function(st) {
-            var cwDays = st.daily ? st.daily.map(function(d) { return d.value || 0; }) : new Array(s4dates.length).fill(0);
-            var cwSum = cwDays.reduce(function(a,b) { return a+b; }, 0);
-            var ps = prevMap[st.code];
-            var pwSum = ps && ps.daily ? ps.daily.reduce(function(a,d) { return a + (d.value || 0); }, 0) : 0;
-            var pct = pwSum > 0 ? Math.round(cwSum / pwSum * 100) : 0;
-            cwDays.forEach(function(v,i) { distCw[i] += v; });
-            distPwTotal += pwSum;
-            distChildren.push({ depth: 2, label: st.store || st.channel || st.code, data: cwDays.concat([cwSum, pwSum, pct]) });
-          });
-
-          var distCwSum = distCw.reduce(function(a,b) { return a+b; }, 0);
-          var distPct = distPwTotal > 0 ? Math.round(distCwSum / distPwTotal * 100) : 0;
-          distCw.forEach(function(v,i) { brandCw[i] += v; });
-          brandPwTotal += distPwTotal;
-
-          brandChildren.push({ depth: 1, label: distName, data: distCw.concat([distCwSum, distPwTotal, distPct]) });
-          distChildren.forEach(function(c) { brandChildren.push(c); });
-        });
-
-        var brandCwSum = brandCw.reduce(function(a,b) { return a+b; }, 0);
-        var brandPct = brandPwTotal > 0 ? Math.round(brandCwSum / brandPwTotal * 100) : 0;
-        brandCw.forEach(function(v,i) { grandCw[i] += v; });
-        grandPw += brandPwTotal;
-
-        channels.push({ depth: 0, label: brandName, data: brandCw.concat([brandCwSum, brandPwTotal, brandPct]) });
-        brandChildren.forEach(function(c) { channels.push(c); });
-      });
-
-      view.s4 = { dates: s4dates, channels: channels };
+      var distCwSum = distCw.reduce(function(a,b){return a+b;},0);
+      var distPct = distPwTotal>0 ? Math.round(distCwSum/distPwTotal*100) : 0;
+      distCw.forEach(function(v,i){chCw[i]+=v;});
+      chPwTotal += distPwTotal;
+      chChildren.push({depth:2,label:distName,data:distCw.concat([distCwSum,distPwTotal,distPct])});
+      distChildren.forEach(function(c){chChildren.push(c);});
+    });
+    var chCwSum = chCw.reduce(function(a,b){return a+b;},0);
+    var chPct = chPwTotal>0 ? Math.round(chCwSum/chPwTotal*100) : 0;
+    chCw.forEach(function(v,i){brandCw[i]+=v;});
+    brandPwTotal += chPwTotal;
+    brandChildren.push({depth:1,label:chName,data:chCw.concat([chCwSum,chPwTotal,chPct])});
+    chChildren.forEach(function(c){brandChildren.push(c);});
+  });
+  var brandCwSum = brandCw.reduce(function(a,b){return a+b;},0);
+  var brandPct = brandPwTotal>0 ? Math.round(brandCwSum/brandPwTotal*100) : 0;
+  brandCw.forEach(function(v,i){grandCw[i]+=v;});
+  grandPw += brandPwTotal;
+  channels.push({depth:0,label:brandName,data:brandCw.concat([brandCwSum,brandPwTotal,brandPct])});
+  brandChildren.forEach(function(c){channels.push(c);});
+});
+view.s4 = { dates: s4dates, channels: channels };
     }
   });
 })();
