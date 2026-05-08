@@ -759,9 +759,9 @@ function renderSection1(s1) {
             <div class="row-item"><span class="label">${((M-2+11)%12)+1}월 총계</span><span class="value">${fmt(d.m2total)}</span></div>
           </td>
           <td class="sub-cell" style="width:25%;border-right:2px solid #D8DCE3;">
-            <div class="row-item"><span class="label">12월 누계</span><span class="value">${fmt(d.m12cum)}</span></div>
-            <div class="row-item pct"><span class="label">12월 동기비</span><span class="value ${pctClass(d.m12pct)}">${d.m12pct}%</span></div>
-            <div class="row-item"><span class="label">12월 총계</span><span class="value">${fmt(d.m12total)}</span></div>
+            <div class="row-item"><span class="label">${((M-3+11)%12)+1}월 누계</span><span class="value">${fmt(d.m12cum)}</span></div>
+            <div class="row-item pct"><span class="label">${((M-3+11)%12)+1}월 동기비</span><span class="value ${pctClass(d.m12pct)}">${d.m12pct}%</span></div>
+            <div class="row-item"><span class="label">${((M-3+11)%12)+1}월 총계</span><span class="value">${fmt(d.m12total)}</span></div>
           </td>
           <td class="sub-cell" style="width:25%;">
             <div class="row-item"><span class="label">25' ${M}월 누계</span><span class="value">${fmt(d.ly3cum)}</span></div>
